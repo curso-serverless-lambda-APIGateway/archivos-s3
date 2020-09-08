@@ -1,18 +1,33 @@
 'use strict';
 
-module.exports.hello = async event => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: 'Go Serverless v1.0! Your function executed successfully!',
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+const serverless = require('serverless-http')
+const express = require('express')
+const app = express()
+const AWS = require('aws-sdk')
+const s3 = new AWS.S3()
+const multer = require('multer')
+const multerS3 = require('multer-s3')
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
-};
+const upload = multer({
+  storage: multerS3({
+    s3,
+    bucket: process.env.bucket,
+    key: (req, file, cb) => {
+      const fileExtension = file.originalname.split('.')[1]
+      cb(null, `${Date.now().toString()}.${fileExtension}`)
+    }
+  })
+}).single('photo')
+
+app.post('/upload', (req, res) => {
+  upload(req, res, (err) => {
+    if (err) {
+      res.send('Error', err).status(500)
+    } else {
+      console.log(req.body)
+      res.send('Archivo subido correctamente').status(200)
+    }
+  })
+})
+
+module.exports.app = serverless(app)
