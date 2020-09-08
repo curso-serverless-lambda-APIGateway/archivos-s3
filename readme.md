@@ -5,7 +5,6 @@
   3. [Configurar serverless.yml](#serverlessCfg)
   4. [Configurar app con Express y serverless-http](#handlerCfg)
   5. [Función Upload](#upload)
-  6. [Crear y configurar VPC y subnets con Lambda, roles y S3](#vpc)
 
 <a name="profiles"></a>
 ## Crear profiles y asignarlos en serverless
