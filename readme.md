@@ -6,8 +6,11 @@
   4. [Configurar app con Express y serverless-http](#handlerCfg)
   5. [Función Upload](#upload)
 
+<hr>
+
 <a name="profiles"></a>
-## Crear profiles y asignarlos en serverless
+
+## 1. Crear profiles y asignarlos en serverless
 
 Es posible ahorrarnos el paso de establecer manualmente los datos de acceso a AWS para hacer los deploys. Podemos asignar un profile que tengamos establecido en *~/.aws/credentials* y asociarlo directamente en el archivo **serverless.yml** bajo el apartado *provider*.
 
@@ -18,8 +21,11 @@ provider:
   profile: curso-sls
 ~~~
 
+<hr>
+
 <a name="dependencies"></a>
-## Dependencias necesarias
+
+## 2. Dependencias necesarias
 
 Para este proyecto instalaremos las siguientes dependencias:
   - aws-sdk **->** Lo usaremos para poder subir archivos a S3
@@ -31,8 +37,11 @@ Para este proyecto instalaremos las siguientes dependencias:
 
 `npm i aws-sdk express multer multer-s3 serverless-apigw-binary serverless-http`
 
+<hr>
+
 <a name="serverlessCfg"></a>
-## Configurar serverless.yml
+
+## 3. Configurar serverless.yml
 
 Lo primero que tenemos que hacer es crear el bucket de s3 a través de la consola de AWS (curso-sls-dev).
 
@@ -80,8 +89,11 @@ functions:
          method: post
 ~~~
 
+<hr>
+
 <a name="handlerCfg"></a>
-## Configurar app con Express y serverless-http
+
+## 4. Configurar app con Express y serverless-http
 
   1. Creamos las constantes necesarias en el archivo **handler.js**
 
@@ -109,8 +121,11 @@ app.post('/upload', (req, res) => {
 module.exports.app = serverless(app);
 ~~~
 
+<hr>
+
 <a name="upload"></a>
-## Función para la subida de archivos
+
+## 5. Función para la subida de archivos
 
   1. Configuramos la constante upload que establecerá el bucket donde se guardará el archivo y el nombre del archivo subido
   
