@@ -14,7 +14,7 @@
 
 Es posible ahorrarnos el paso de establecer manualmente los datos de acceso a AWS para hacer los deploys. Podemos asignar un profile que tengamos establecido en *~/.aws/credentials* y asociarlo directamente en el archivo **serverless.yml** bajo el apartado *provider*.
 
-~~~
+~~~yml
 provider:
   name: aws
   runtime: nodejs12.x
@@ -49,7 +49,7 @@ Dentro del archivo **serverless.yml** añadimos lo siguente:
 
   - Una nueva entrada *custom* donde se definirá el bucket s3 y el tipo de archivos que podrán subirse:
 
-~~~
+~~~yml
 custom:
   bucket: curso-sls
   default_stage: dev
@@ -60,14 +60,14 @@ custom:
 
   - Una nueva entrada *plugins* donde definimos el plugin de ApiGateway
 
-~~~
+~~~yml
 plugins:
   - serverless-apigw-binary
 ~~~
 
   - En la entrada *provider* añadimos una línea para definir el stage cuando hagamos el deploy
 
-~~~
+~~~yml
 provider:
   name: aws
   runtime: nodejs12.x
@@ -77,7 +77,7 @@ provider:
 
   - En las funciones donde sea necesario acceder al bucket, estableceremos una entrada *environment* que tomará el valor que asignamos en la entrada *custom* como se muestra:
 
-~~~
+~~~yml
 functions:
   uploadS3File:
     handler: handler.app
@@ -97,7 +97,7 @@ functions:
 
   1. Creamos las constantes necesarias en el archivo **handler.js**
 
-~~~
+~~~js
 const serverless = require('serverless-http');
 const express = require('express');
 const app = express();
@@ -109,7 +109,7 @@ const multerS3 = require('multer-s3')
 
   2. Creamos nuestro primer end-point de prueba:
 
-~~~
+~~~js
 app.post('/upload', (req, res) => {
   res.send('todo ok')
 });
@@ -117,7 +117,7 @@ app.post('/upload', (req, res) => {
 
   3. Exportamos la app
 
-~~~
+~~~js
 module.exports.app = serverless(app);
 ~~~
 
@@ -129,7 +129,7 @@ module.exports.app = serverless(app);
 
   1. Configuramos la constante upload que establecerá el bucket donde se guardará el archivo y el nombre del archivo subido
   
-~~~
+~~~js
   const upload = multer({
   storage: multerS3({
     s3,
@@ -144,7 +144,7 @@ module.exports.app = serverless(app);
 
   2. Definimos la función que enviará el archivo a s3
 
-~~~
+~~~js
 app.post('/upload', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
